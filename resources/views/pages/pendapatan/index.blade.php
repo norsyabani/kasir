@@ -20,6 +20,7 @@
                 <div class="form-group d-flex flex-row align-items-center justify-content-end">
                     <label for="sort" class="mb-0 me-2">Sort by</label>
                     <select class="form-control w-50" id="sort">
+                      <option value="all" selected>Semua data</option>
                       <option value="day">Data per hari</option>
                       <option value="month">Data per Bulan</option>
                     </select>
@@ -36,10 +37,10 @@
                   <th id="time">
                     Tanggal
                   </th>
-                  <th>
+                  <th id="transaksi">
                     Total Transaksi
                   </th>
-                  <th>
+                  <th id="pendapatan">
                     Total Pendapatan
                   </th>
                   <th>
@@ -88,47 +89,31 @@
     }
 
     function getData( ){
+        $('#tBody').empty();
         $.ajax({
             url: '/pendapatan/get_data',
             type: 'GET',
             success: function(data){
-                var result = Object.keys(data.data).map((key) => [Number(key), data.data[key]]);
 
-                let i = 1;
-                result.forEach(element => {
+                for (let i = 0; i < data.data.length; i++) {
 
-                    function totalHarga(data){
-                        var total = [];
-                        if(element[1].length > 1){
-                            for(let j = 0; j < data.length; j++){
-                                total.push(data[j]['total_harga']);
-                            }
-                            return total.reduce((a,b) => a + b, 0);
-                        }else{
-                            return data[0]['total_harga'];
-                        }
-                    }
-
-                    for(let j = 0; j < element[1].length; j++){
-                        var date = element[1][j]['created_at'];
-                        date = moment(date).format('YYYY-MM-DD');
-                    }
-
-                    var row = '<tr>' +
-                                '<td>' + (i++) + '</td>' +
-                                '<td>' + moment(element[1][0]['created_at']).format('dddd, MMMM Do YYYY') + '</td>' +
-                                '<td>' + element[1].length+ '</td>' +
-                                '<td>' + 'Rp. ' + moneyFormat(totalHarga(element[1])) + '</td>' +
-                                '<td>' + '<a href="/pendapatan/day/'+date+'/detail" class="btn btn-inverse-primary btn-fw btn-rounded">Lihat Detail</a>' + '</td>' +
-                            '</tr>';
+                    var row  = '<tr>' +
+                                    '<td>' + (i+1) + '</td>' +
+                                    '<td>' + moment(data.data[i].created_at).format('dddd, MMMM Do YYYY') + '</td>' +
+                                    '<td>' + data.data[i].nama_customer + '</td>' +
+                                    '<td>' + 'Rp. ' +moneyFormat(data.data[i].total_harga) + '</td>' +
+                                    '<td>' +
+                                        '<a href="/transaksi/' + data.data[i].id + '" class="btn btn-inverse-primary btn-fw btn-rounded">Detail</a>' +
+                                    '</td>' +
+                                '</tr>';
                     $('#tBody').append(row);
-
-                });
+                }
             }
         });
     }
 
     function sortData(sort){
+        $('#tBody').empty();
         $.ajax({
             url: '/pendapatan/'+sort+'/sort',
             type: 'GET',
@@ -155,12 +140,21 @@
                         date = moment(date).format('YYYY-MM-DD');
                     }
 
+                    var time = element[1][0]['created_at'];
+                    if(sort == 'day'){
+                        time = moment(time).format('dddd, MMMM Do YYYY');
+                    }else if(sort == 'month'){
+                        time = moment(time).format('MMMM YYYY');
+                    }else {
+                        time = moment(time).format('dddd, MMMM Do YYYY');
+                    }
+
                     var row = '<tr>' +
                                 '<td>' + (i++) + '</td>' +
-                                '<td>' + moment(element[1][0]['created_at']).format('MMMM YYYY') + '</td>' +
+                                '<td>' + time + '</td>' +
                                 '<td>' + element[1].length+ '</td>' +
                                 '<td>' + 'Rp. ' + moneyFormat(totalHarga(element[1])) + '</td>' +
-                                '<td>' + '<a href="/pendapatan/month/'+date+'/detail" class="btn btn-inverse-primary btn-fw btn-rounded">Lihat Detail</a>' + '</td>' +
+                                '<td>' + '<a href="/pendapatan/'+sort+'/'+date+'/detail" class="btn btn-inverse-primary btn-fw btn-rounded">Lihat Detail</a>' + '</td>' +
                             '</tr>';
                     $('#tBody').append(row);
 
@@ -172,26 +166,47 @@
     $('#sort').change(function(){
         var sort = $(this).val();
         $('#tBody').empty();
-        sortData(sort);
         if(sort == 'day'){
+            sortData(sort);
             $('#time').text('Tanggal');
             $('#title').text('Pendapatan Hari Ini');
-        }else{
+            $('#transaksi').text('Total Transaksi');
+            $('#pendapatan').text('Total Pendapatan');
+        } else if(sort == 'month'){
+            sortData(sort);
             $('#time').text('Bulan');
             $('#title').text('Pendapatan Bulan Ini');
+            $('#transaksi').text('Total Transaksi');
+            $('#pendapatan').text('Total Pendapatan');
+        } else if(sort == 'all'){
+            getData();
+            $('#time').text('Tanggal');
+            $('#title').text('Semua Pendapatan');
+            $('#transaksi').text('Nama Customer');
+            $('#pendapatan').text('Total Transaksi');
         }
     });
 
     if($('#sort').val() == 'day'){
         $('#time').text('Tanggal');
         $('#title').text('Pendapatan Hari Ini');
+        $('#transaksi').text('Total Transaksi');
+        $('#pendapatan').text('Total Pendapatan');
         sortData('day');
-    }else{
+    } else if($('#sort').val() == 'month'){
         $('#time').text('Bulan');
         $('#title').text('Pendapatan Bulan Ini');
+        $('#transaksi').text('Total Transaksi');
+        $('#pendapatan').text('Total Pendapatan');
         sortData('month');
+    } else if($('#sort').val() == 'all'){
+        $('#time').text('Tanggal');
+        $('#title').text('Semua Pendapatan');
+        $('#transaksi').text('Nama Customer');
+        $('#pendapatan').text('Total Transaksi');
+        getData();
     }
 
-    getData();
+    // getData();
   </script>
 @endsection

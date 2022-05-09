@@ -17,6 +17,10 @@ class PendapatanController extends Controller
             return Carbon::parse($d->created_at)->format('Y');
         });
 
+        $dataByDay = Order::get()->groupBy(function($d) {
+            return Carbon::parse($d->created_at)->format('d');
+        });
+
         $dataByDayOfWeek = Order::get()->groupBy(function($d) {
             return Carbon::parse($d->created_at)->format('l');
         });
@@ -28,9 +32,7 @@ class PendapatanController extends Controller
 
     public function getData()
     {
-        $data = Order::get()->groupBy(function($d) {
-            return Carbon::parse($d->created_at)->format('d');
-        });
+        $data = Order::get();
 
         if ($data) {
             return response()->json([
@@ -71,6 +73,8 @@ class PendapatanController extends Controller
             $data = Order::get()->groupBy(function($d) {
                 return Carbon::parse($d->created_at)->format('d');
             });
+        } elseif ($param == 'all') {
+            $data = Order::get();
         }
 
         if ($data) {
