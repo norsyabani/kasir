@@ -152,7 +152,11 @@
             return sum;
         }
 
+        const loader = '<tr class="text-center"><td colspan="5"><div class="dots m-auto"></div></td></tr>';
+
         function getOrderDetail(id) {
+            $('#tableBody').empty();
+            $('#tableBody').append(loader);
             $.ajax({
                 url: '/transaksi/' + id + '/get_order_detail',
                 type: 'GET',

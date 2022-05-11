@@ -9,6 +9,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
+
 <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
@@ -88,12 +89,16 @@
         return rupiah;
     }
 
+    const loader = '<tr class="text-center"><td colspan="5"><div class="dots m-auto"></div></td></tr>';
+
     function getData( ){
         $('#tBody').empty();
+        $('#tBody').append(loader);
         $.ajax({
             url: '/pendapatan/get_data',
             type: 'GET',
             success: function(data){
+                $('#tBody').empty();
 
                 for (let i = 0; i < data.data.length; i++) {
 
@@ -114,10 +119,12 @@
 
     function sortData(sort){
         $('#tBody').empty();
+        $('#tBody').append(loader);
         $.ajax({
             url: '/pendapatan/'+sort+'/sort',
             type: 'GET',
             success: function(data){
+                $('#tBody').empty();
                 var result = Object.keys(data.data).map((key) => [Number(key), data.data[key]]);
 
                 let i = 1;
@@ -207,6 +214,8 @@
         getData();
     }
 
-    // getData();
+    $(window).on('load', function(){
+        $('#sort').val('all');
+    });
   </script>
 @endsection
