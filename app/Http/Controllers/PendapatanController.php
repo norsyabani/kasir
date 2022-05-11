@@ -51,7 +51,7 @@ class PendapatanController extends Controller
     public function detail($param, $date)
     {
         if ($param == 'day') {
-            $data = Order::whereDate('created_at', $date)->get();
+            $data = Order::whereDate('created_at', $date)->whereMonth('created_at', Carbon::parse($date)->format('m'))->get();
             $displayDate = Carbon::parse($date)->format('d F Y');
         } elseif ($param == 'month') {
             $month = Carbon::parse($date)->format('m');
@@ -71,7 +71,7 @@ class PendapatanController extends Controller
             });
         } elseif ($param == 'day') {
             $data = Order::get()->groupBy(function($d) {
-                return Carbon::parse($d->created_at)->format('d');
+                return Carbon::parse($d->created_at)->format('d-m');
             });
         } elseif ($param == 'all') {
             $data = Order::get();
