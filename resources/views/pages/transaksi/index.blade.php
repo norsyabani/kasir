@@ -23,8 +23,8 @@
                 </button>
             </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-striped">
+        <div class="table-responsive mt-4">
+          <table class="table table-striped" id="myTable">
             <thead>
               <tr>
                 <th>
@@ -43,28 +43,28 @@
             </thead>
             <tbody>
                 @forelse ($order as $order)
-                <tr>
-                    <td>
-                        {{ $loop->iteration }}
-                    </td>
-                    <td>
-                        {{ $order->nama_customer }}
-                    </td>
-                    <td>
-                        Rp. {{ number_format($order->total_harga, 0, ',', '.') }}
-                    </td>
-                    <td class="text-center">
-                        <a href="/transaksi/{{ $order->id }}" class="btn btn-rounded btn-inverse-primary btn-icon">
-                            Lihat Detail Pesanan
-                        </a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            {{ $loop->iteration }}
+                        </td>
+                        <td>
+                            {{ $order->nama_customer }}
+                        </td>
+                        <td>
+                            Rp. {{ number_format($order->total_harga, 0, ',', '.') }}
+                        </td>
+                        <td class="text-center">
+                            <a href="/transaksi/{{ $order->id }}" class="btn btn-rounded btn-inverse-primary btn-icon py-2 mb-0 me-0">
+                                Lihat Detail Pesanan
+                            </a>
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="4" class="text-center">
-                        <h4>Tidak ada data</h4>
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <h4>Tidak ada data</h4>
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
           </table>
@@ -97,5 +97,13 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready( function () {
+            $('#myTable').DataTable();
+        });
+    </script>
 
 @endsection
