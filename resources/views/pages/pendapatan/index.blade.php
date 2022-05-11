@@ -101,8 +101,9 @@
                 $('#tBody').empty();
 
                 for (let i = 0; i < data.data.length; i++) {
+                    setTimeout (function(){
 
-                    var row  = '<tr>' +
+                    var row  = '<tr class="animate__animated animate__fadeInDown">' +
                                     '<td>' + (i+1) + '</td>' +
                                     '<td>' + moment(data.data[i].created_at).format('dddd, MMMM Do YYYY') + '</td>' +
                                     '<td>' + data.data[i].nama_customer + '</td>' +
@@ -111,7 +112,10 @@
                                         '<a href="/transaksi/' + data.data[i].id + '" class="btn btn-inverse-primary btn-fw btn-rounded">Detail</a>' +
                                     '</td>' +
                                 '</tr>';
-                    $('#tBody').append(row);
+
+
+                        $('#tBody').append(row);
+                    }, i*100);
                 }
             }
         });
@@ -127,8 +131,7 @@
                 $('#tBody').empty();
                 var result = Object.keys(data.data).map((key) => [Number(key), data.data[key]]);
 
-                let i = 1;
-                result.forEach(element => {
+                result.forEach((element, index) => {
 
                     function totalHarga(data){
                         var total = [];
@@ -156,14 +159,16 @@
                         time = moment(time).format('dddd, MMMM Do YYYY');
                     }
 
-                    var row = '<tr>' +
-                                '<td>' + (i++) + '</td>' +
+                    setTimeout (function(){
+                        var row = '<tr class="animate__animated animate__fadeInDown">' +
+                                '<td>' + (index+1) + '</td>' +
                                 '<td>' + time + '</td>' +
                                 '<td>' + element[1].length+ '</td>' +
                                 '<td>' + 'Rp. ' + moneyFormat(totalHarga(element[1])) + '</td>' +
                                 '<td>' + '<a href="/pendapatan/'+sort+'/'+date+'/detail" class="btn btn-inverse-primary btn-fw btn-rounded">Lihat Detail</a>' + '</td>' +
                             '</tr>';
-                    $('#tBody').append(row);
+                        $('#tBody').append(row);
+                    }, index*100);
 
                 });
             }

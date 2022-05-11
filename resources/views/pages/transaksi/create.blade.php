@@ -167,14 +167,19 @@
                     } else {
 
                         for (var i = 0; i < data.length; i++) {
-                            var row = '<tr>' +
-                                '<td>' + (i+1) + '</td>' +
-                                '<td>' + data[i].produk.nama + '</td>' +
-                                '<td>' + data[i].jumlah + '</td>' +
-                                '<td>' + 'Rp. '+ moneyFormat(data[i].total_harga) + '</td>' +
-                                '<td>' + '<button id="deleteItemBtn" class="btn btn-danger" onclick="deleteItem(' + data[i].id + ')">Hapus</button>' + '</td>' +
-                                '</tr>';
-                            $('#tableBody').append(row);
+
+                            (function(i) {
+                                setTimeout(() => {
+                                    var row = '<tr class="animate__animated animate__fadeInDown">' +
+                                    '<td>' + (i+1) + '</td>' +
+                                    '<td>' + data[i].produk.nama + '</td>' +
+                                    '<td>' + data[i].jumlah + '</td>' +
+                                    '<td>' + 'Rp. '+ moneyFormat(data[i].total_harga) + '</td>' +
+                                    '<td>' + '<button id="deleteItemBtn" class="btn btn-danger" onclick="deleteItem(' + data[i].id + ')">Hapus</button>' + '</td>' +
+                                    '</tr>';
+                                $('#tableBody').append(row);
+                                }, i * 200);
+                            })(i);
                         }
 
                         if (data.length > 0) {
