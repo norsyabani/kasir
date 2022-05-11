@@ -42,7 +42,7 @@
                             {{ $d->nama_customer }}
                         </td>
                         <td>
-                            {{ $d->created_at }}
+                            {{ \Carbon\Carbon::parse($d->created_at)->format('d F Y - H:i:s') }}
                         </td>
                         <td>
                             Rp. {{ number_format($d->total_harga, 0, ',', '.') }}
