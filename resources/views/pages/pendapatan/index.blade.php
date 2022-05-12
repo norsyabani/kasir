@@ -117,6 +117,16 @@
                         $('#tBody').append(row);
                     }, i*100);
                 }
+            },
+            error: function(data){
+                if (data.status == 401) {
+                    notyf.error('Anda tidak memiliki hak akses');
+                    setTimeout (function(){
+                        window.location.href = '/login';
+                    }, 2500);
+                } else if (data.status == 'failed') {
+                    notyf.error(data.message);
+                }
             }
         });
     }
@@ -171,6 +181,18 @@
                     }, index*100);
 
                 });
+            },
+            error: function(data){
+                if(data.status == 401){
+                    notyf.error('Anda tidak memiliki akses');
+                    setTimeout (function(){
+                        window.location.href = '/login';
+                    }, 2500);
+                } else if(data.status == 'failed'){
+                    notyf.error(data.message);
+                } else {
+                    notyf.error('Terjadi kesalahan');
+                }
             }
         });
     }
@@ -221,6 +243,16 @@
 
     $(window).on('load', function(){
         $('#sort').val('all');
+    });
+
+    var notyf = new Notyf({
+            duration: 2500,
+            ripple: true,
+            dismissible: true,
+            position: {
+                x: 'center',
+                y: 'top',
+            },
     });
   </script>
 @endsection

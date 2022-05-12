@@ -39,12 +39,14 @@ class PendapatanController extends Controller
                 'status' => true,
                 'data' => $data
             ]);
-        } else {
+        } else if ($data == null) {
             return response()->json([
                 'status' => 'failed',
                 'data' => null,
                 'message' => 'Data tidak ditemukan',
             ]);
+        } else {
+            abort(401, 'Silahkan login terlebih dahulu');
         }
     }
 
@@ -82,12 +84,14 @@ class PendapatanController extends Controller
                 'status' => true,
                 'data' => $data
             ]);
-        } else {
+        } else if ($data == null) {
             return response()->json([
                 'status' => 'failed',
                 'data' => null,
                 'message' => 'Data tidak ditemukan',
             ]);
+        } else {
+            abort(401, 'Silahkan login terlebih dahulu');
         }
     }
 

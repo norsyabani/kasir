@@ -65,7 +65,13 @@ class TransaksiController extends Controller
     {
         $order = OrderDetail::where('order_id', $id)->with('produk', 'order')->get();
 
-        return response()->json($order, 200);
+        if ($order) {
+            return response()->json($order, 200);
+        } else if ($order == null) {
+            return response()->json(['error' => 'Gagal mengambil data'], 500);
+        } else {
+            abort(401, 'Silahkan login terlebih dahulu');
+        }
     }
 
     public function deleteItem(Request $request, $id)

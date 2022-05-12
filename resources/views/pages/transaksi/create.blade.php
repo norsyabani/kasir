@@ -190,6 +190,21 @@
                             $('#prosesCheckoutBtn').attr('disabled', true);
                         }
                     }
+                },
+                error: function(data) {
+                    $('#tableBody').empty();
+                    $('#tableBody').append('<tr><td colspan="5" class="text-center">Tidak ada item</td></tr>');
+
+                    if (data.status == 500) {
+                        notyf.error(data.message);
+                    } else if (data.status == 401) {
+                        setTimeout(() => {
+                            notyf.error('Anda tidak memiliki akses');
+                            window.location.href = '/login';
+                        }, 2500);
+                    } else {
+                        notyf.error('Terjadi kesalahan');
+                    }
                 }
             });
         }
@@ -216,6 +231,18 @@
                     getOrderDetail('{{ $order->id }}');
                     notyf.success(data.message);
 
+                },
+                error: function(data) {
+                    if (data.status == 500) {
+                        notyf.error(data.error);
+                    } else if (data.status == 401) {
+                        notyf.error('Anda tidak memiliki akses');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2500);
+                    } else {
+                        notyf.error('Terjadi kesalahan');
+                    }
                 }
             });
         }
