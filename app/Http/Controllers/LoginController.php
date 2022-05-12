@@ -4,12 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
 
 class LoginController extends Controller
 {
     public function index()
     {
+        session(['url.intended' => url()->previous()]);
+
+        return view('login');
+    }
+
+    public function showLoginForm()
+    {
+        if(!session()->has('url.intended'))
+        {
+            session(['url.intended' => url()->previous()]);
+        }
         return view('login');
     }
 
@@ -21,11 +31,18 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
 
-            // $referer = Request::server('HTTP_REFERER');
 
-            return redirect('/');
+            if(session()->has('url.intended'))
+            {
+                $url = session()->get('url.intended');
+                return redirect($url);
+                session()->forget('url.intended');
+            } else {
+                $request->session()->regenerate();
+                return redirect('/');
+                session()->forget('url.intended');
+            }
         }
 
         return back()->with('loginError', 'Login Failed! check your credentials');
@@ -38,6 +55,8 @@ class LoginController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        session(['url.intended' => url()->previous()]);
 
         return redirect('/login');
     }

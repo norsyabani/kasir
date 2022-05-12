@@ -192,9 +192,6 @@
                     }
                 },
                 error: function(data) {
-                    $('#tableBody').empty();
-                    $('#tableBody').append('<tr><td colspan="5" class="text-center">Tidak ada item</td></tr>');
-
                     if (data.status == 500) {
                         notyf.error(data.message);
                     } else if (data.status == 401) {
