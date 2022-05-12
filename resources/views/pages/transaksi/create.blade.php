@@ -5,64 +5,68 @@
 @section('content')
 <div class="row">
     <h4><strong>Pilih Menu</strong></h4>
-    @forelse ($produk as $produk)
-        @if ($produk->kategori_id == 1)
-            <p class="mb-0">Makanan:</p>
-            <div class="col-lg-12 d-flex flex-column mt-3">
-            <div class="row flex-grow">
-                <div class="col-md-6 col-lg-3 grid-margin stretch-card">
-                        <div class="card bg-primary card-rounded me-3">
-                            <div class="card-body d-flex justify-content-between align-items-center" style="padding: .8rem !important">
-                                <div class="item">
-                                    <h4 class="card-title card-title-dash text-white">{{ $produk->nama }}</h4>
-                                    <p class="status-summary-ight-white mb-1">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
-                                </div>
-                                <div class="cta">
-                                    <button id="modalBtn" data-bs-toggle="modal" data-bs-target="#addItem{{ $produk->id }}"
-                                        type="button" class="btn btn-light m-0"><i class="ti-shopping-cart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="addItem{{ $produk->id }}" tabindex="-1" aria-labelledby="addItem{{ $produk->id }}Label" aria-hidden="true">
-                            @include('pages.transaksi.modal.item')
-                        </div>
-
+    <p class="mb-0">Makanan:</p>
+    <div class="row mt-2">
+        @foreach ($produk as $data)
+        @if ($data->kategori_id == 1)
+        <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+            <div class="card bg-primary card-rounded me-3">
+                <div class="card-body d-flex justify-content-between align-items-center" style="padding: .8rem !important">
+                    <div class="item">
+                        <h4 class="card-title card-title-dash text-white">{{ $data->nama }}</h4>
+                        <p class="status-summary-ight-white mb-1">Rp. {{ number_format($data->harga, 0, ',', '.') }}</p>
+                    </div>
+                    <div class="cta">
+                        @if ($data->ketersediaan == 1)
+                            <button id="modalBtn" data-bs-toggle="modal" data-bs-target="#addItem{{ $data->id }}"
+                                type="button" class="btn btn-light m-0"><i class="ti-shopping-cart"></i></button>
+                        @else
+                            <button type="button" class="btn btn-light m-0" disabled><i class="ti-shopping-cart"></i></button>
+                        @endif
                     </div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="addItem{{ $data->id }}" tabindex="-1" aria-labelledby="addItem{{ $data->id }}Label" aria-hidden="true">
+                @include('pages.transaksi.modal.item')
+            </div>
+
+        </div>
         @endif
-        @if ($produk->kategori_id == 2)
-            <p class="mb-0">Minuman:</p>
-            <div class="col-lg-12 d-flex flex-column mt-3">
-            <div class="row flex-grow">
-                <div class="col-md-6 col-lg-3 grid-margin stretch-card">
-                        <div class="card bg-primary card-rounded me-3">
-                            <div class="card-body d-flex justify-content-between align-items-center" style="padding: .8rem !important">
-                                <div class="item">
-                                    <h4 class="card-title card-title-dash text-white">{{ $produk->nama }}</h4>
-                                    <p class="status-summary-ight-white mb-1">Rp. {{ number_format($produk->harga, 0, ',', '.') }}</p>
-                                </div>
-                                <div class="cta">
-                                    <button id="modalBtn" data-bs-toggle="modal" data-bs-target="#addItem{{ $produk->id }}"
-                                        type="button" class="btn btn-light m-0"><i class="ti-shopping-cart"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="addItem{{ $produk->id }}" tabindex="-1" aria-labelledby="addItem{{ $produk->id }}Label" aria-hidden="true">
-                            @include('pages.transaksi.modal.item')
-                        </div>
-
+        @endforeach
+    </div>
+    <p class="mb-0">Minuman:</p>
+    <div class="row mt-2">
+        @foreach ($produk as $data)
+        @if ($data->kategori_id == 2)
+        <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+            <div class="card bg-primary card-rounded me-3">
+                <div class="card-body d-flex justify-content-between align-items-center" style="padding: .8rem !important">
+                    <div class="item">
+                        <h4 class="card-title card-title-dash text-white">{{ $data->nama }}</h4>
+                        <p class="status-summary-ight-white mb-1">Rp. {{ number_format($data->harga, 0, ',', '.') }}</p>
+                    </div>
+                    <div class="cta">
+                        @if ($data->ketersediaan == 1)
+                            <button id="modalBtn" data-bs-toggle="modal" data-bs-target="#addItem{{ $data->id }}"
+                                type="button" class="btn btn-light m-0"><i class="ti-shopping-cart"></i></button>
+                        @else
+                            <button type="button" class="btn btn-light m-0" disabled><i class="ti-shopping-cart"></i></button>
+                        @endif
                     </div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="addItem{{ $data->id }}" tabindex="-1" aria-labelledby="addItem{{ $data->id }}Label" aria-hidden="true">
+                @include('pages.transaksi.modal.item')
+            </div>
+
+        </div>
         @endif
-    @empty
-        <h3 class="text-center">Tidak ada Produk</h3>
-    @endforelse
+        @endforeach
+    </div>
   </div>
 
   <!-- Modal -->

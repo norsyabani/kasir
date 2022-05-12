@@ -21,9 +21,12 @@ class ProdukController extends Controller
         $data = $request->validate([
             'kategori_id' => 'required|integer',
             'nama' => 'required|string|max:255',
-            'harga' => 'required|integer',
+            'harga' => 'required',
             'ketersediaan' => 'required|boolean',
         ]);
+
+        $data['harga'] = str_replace(',', '', $data['harga']);
+        $data['harga'] = str_replace('.', '', $data['harga']);
 
         Produk::create($data);
 
