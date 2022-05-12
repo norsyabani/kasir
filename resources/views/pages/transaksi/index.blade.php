@@ -54,9 +54,16 @@
                             Rp. {{ number_format($order->total_harga, 0, ',', '.') }}
                         </td>
                         <td class="text-center">
-                            <a href="/transaksi/{{ $order->id }}" class="btn btn-rounded btn-inverse-primary btn-icon py-2 mb-0 me-0">
-                                Lihat Detail Pesanan
-                            </a>
+                            @if ($order->total_harga == 0)
+                                <a href="/transaksi/{{ $order->id }}/detail" class="btn btn-rounded btn-inverse-warning btn-icon py-2 mb-0 me-0">
+                                    Checkout Pesanan
+                                </a>
+                            @else
+                                <a href="/transaksi/{{ $order->id }}" class="btn btn-rounded btn-inverse-primary btn-icon py-2 mb-0 me-0">
+                                    Lihat Detail Pesanan
+                                </a>
+
+                            @endif
                         </td>
                     </tr>
                 @empty
